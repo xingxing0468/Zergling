@@ -11,4 +11,4 @@ inputs:
     default: "**/*"
 runs:
   using: 'docker'
-  image: 'DockerFile'
+  image: 'Dockerfile'

@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: ./clang_format_action.yml
+    - uses: ./clang-format-actions
       with:
         style: Google
         sources: "cpps/**/*.h, cpps/**/*.cpp"
