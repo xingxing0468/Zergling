@@ -5,7 +5,7 @@
 
 class A {
  public:
-  A() = default;
+    A() = default;
   std::optional<int> Foo(int input);
 };
 
