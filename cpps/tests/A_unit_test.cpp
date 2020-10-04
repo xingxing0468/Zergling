@@ -8,5 +8,5 @@ TEST(A_FOO, EmptyOptionReturnWhenInputSmallerThan100) {
 
 TEST(A_FOO, ReturnValueWhenInputLargerThan100) {
   A a;
-  EXPECT_EQ(a.Foo(110), 100);
+  EXPECT_EQ(110, a.Foo(110));
 }
