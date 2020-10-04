@@ -11,5 +11,5 @@ jobs:
       - uses: actions/checkout@v2
       - uses: RafikFarhad/clang-format-github-action@v1
         with:
+          style: 'Google'
           sources: "cpps/**/*.h,cpps/**/*.cpp"
-          style: "google"
