@@ -5,7 +5,7 @@
 std::optional<int> A::Foo(int input) {
   printf("A's Foo, input [%d]\n", input);
 
-  if (input > 100) {
+     if (input > 100) {
     return input;
   }
 
