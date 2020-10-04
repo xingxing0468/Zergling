@@ -8,8 +8,11 @@ jobs:
   clang-format-checking:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: RafikFarhad/clang-format-github-action@v1
-        with:
-          style: 'Google'
-          sources: "cpps/**/*.h,cpps/**/*.cpp"
+    - uses: actions/checkout@v2
+    - uses: DoozyX/clang-format-lint-action@v0.10
+      with:
+        source: 'cpps/**/*'
+        exclude: ''
+        extensions: 'h,cpp'
+        clangFormatVersion: 10
+        style: Google

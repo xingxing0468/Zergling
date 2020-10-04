@@ -1,7 +1,7 @@
 {
     "name": "C/C++",
     "description": "Build and test a C/C++ project with Bazel",
-    "iconName": "bazel_build_and_test.svg",
+    "iconName": "bazel_build_and_test",
     "categories": [
         "C",
         "C++"
