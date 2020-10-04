@@ -29,6 +29,7 @@ function resolve_inputs() {
 
 function check_file() {
     local file="$1"
+    log "Checking file: ${file}"
     message="$(clang-format -n -Werror $STYLE --fallback-style=Google "${file}")"
     local status="$?"
     if [ $status -ne 0 ]; then
@@ -53,7 +54,7 @@ function main() {
     done
 
     if [ $EXIT_STATUS -eq 0 ]; then
-        log "Congrats! The sources are clang formatted."
+        log "Congrats! All the sources are clang formatted."
         exit 0
     else
         log "Some file is not formatted correctly."
