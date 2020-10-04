@@ -1,0 +1,9 @@
+{
+    "name": "C/C++",
+    "description": "Build and test a C/C++ project with Bazel",
+    "iconName": "c-cpp",
+    "categories": [
+        "C",
+        "C++"
+    ]
+}
