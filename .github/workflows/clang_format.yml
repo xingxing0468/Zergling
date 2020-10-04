@@ -9,8 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: clang-format
-      runs:
+    - uses: ./clang_format_action.yml
       using: docker
       image: DockerFile
       with:
