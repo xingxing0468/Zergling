@@ -1,0 +1,9 @@
+{
+    "name": "Clang Format",
+    "description": "Clang format check for all the source files",
+    "iconName": "",
+    "categories": [
+        "C",
+        "C++"
+    ]
+}

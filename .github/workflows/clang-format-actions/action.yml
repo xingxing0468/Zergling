@@ -1,0 +1,14 @@
+name: Clang Format Action
+description: An action to check the clang foramt
+inputs:
+  style:
+    description: clang format style
+    required: false
+    default: 'Google'
+  sources:
+    description: source files to be checked, "...,..."
+    required: false
+    default: "**/*"
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
