@@ -10,8 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: ./clang_format_action.yml
-      using: docker
-      image: DockerFile
       with:
         style: Google
         sources: "cpps/**/*.h, cpps/**/*.cpp"

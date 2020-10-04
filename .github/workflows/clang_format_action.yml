@@ -6,9 +6,9 @@ inputs:
     required: false
     default: 'Google'
   sources:
-    description: source files to be checked, "...,...,"
+    description: source files to be checked, "...,..."
     required: false
     default: "**/*"
 runs:
-  using: docker
-  image: Dockerfile
+  using: 'docker'
+  image: 'DockerFile'
