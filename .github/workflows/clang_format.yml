@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - uses: DoozyX/clang-format-lint-action@v0.10
+    - name: clang-format
+      runs:
+      using: docker
+      image: DockerFile
       with:
-        source: '.'
-        exclude: ''
-        extensions: 'h,cpp'
-        clangFormatVersion: 10
         style: Google
+        sources: "cpps/**/*.h, cpps/**/*.cpp"
