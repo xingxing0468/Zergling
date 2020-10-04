@@ -1,3 +1,4 @@
+#!/bin/bash
 function log() {
     echo -e "[ clang-format-action ] :: $1"
 }
