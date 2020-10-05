@@ -1,3 +1,5 @@
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+
 cc_library(
     name = "A",
     srcs = ["srcs/A.cpp"],
@@ -5,10 +7,11 @@ cc_library(
     visibility = [":__subpackages__"],
 )
 
-
 cc_test(
     name = "TestA",
     srcs = ["tests/A_unit_test.cpp"],
-    deps = [":A",
-            "@googletest//:gtest_main",],
+    deps = [
+        ":A",
+        "@googletest//:gtest_main",
+    ],
 )
