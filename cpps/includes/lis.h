@@ -2,6 +2,7 @@
 #define _LIS_H_
 
 #include <vector>
-std::vector<int> FindLongestIncreasingSubSequence(std::vector<int> sequence);
+std::vector<int> FindLongestIncreasingSubSequence(
+    const std::vector<int>& sequence);
 
 #endif
