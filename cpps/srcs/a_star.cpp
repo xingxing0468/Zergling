@@ -71,3 +71,9 @@ void Plot(const PointT& start, const PointT& end, const TrajectoryT& traj,
     printf("\n");
   }
 }
+
+TrajectoryT RouteWithAStar(const PointT& start, const PointT& end,
+                           const ObstaclesT& obs) {
+  TrajectoryT ret{};
+  return std::move(ret);
+}
