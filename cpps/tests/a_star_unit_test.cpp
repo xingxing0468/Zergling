@@ -28,11 +28,26 @@ TEST(AStar, Typical) {
 
   TrajectoryT traj = RouteWithAStar(kStart, kEnd, obs);
   Plot(kStart, kEnd, traj, obs);
+
+  EXPECT_NE(traj.find(kStart), traj.end());
+  EXPECT_NE(traj.find(kEnd), traj.end());
+
+  for (const auto& traj_point : traj) {
+    ASSERT_EQ(obs.find(traj_point),
+              obs.end());  // All route point not on obstacles
+  }
+
+  for (const auto& traj_point : traj) {
+    EXPECT_EQ(obs.find(traj_point), obs.end());
+  }
 }
 
 TEST(AStar, NoObstacles) {
   TrajectoryT traj = RouteWithAStar(kStart, kEnd, {});
   Plot(kStart, kEnd, traj, {});
+
+  EXPECT_NE(traj.find(kStart), traj.end());
+  EXPECT_NE(traj.find(kEnd), traj.end());
 }
 
 TEST(AStar, NoTrajectory) {
