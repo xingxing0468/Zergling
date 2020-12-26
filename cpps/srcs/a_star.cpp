@@ -133,15 +133,15 @@ TrajectoryT RouteWithAStar(const PointT& start, const PointT& end,
   traj_stack.push(curr_astar_point);
 
   while (1) {
-    // printf("point: [%d/%d]\n", curr_astar_point.Point.i,
-    //        curr_astar_point.Point.j);
     if (curr_astar_point.Successors.empty()) {  // NO successors, trace back
+      traj_stack.pop();
       if (traj_stack.empty()) {
         break;
       }
       curr_astar_point = traj_stack.top();
-      traj_stack.pop();
-      // printf("Moving backward\n");
+
+      // printf("Try to moving backward to [%d/%d]\n", curr_astar_point.Point.i,
+      //         curr_astar_point.Point.j);
     } else if (curr_astar_point.Successors.find(end) !=
                curr_astar_point.Successors.end()) {
       // Route completed
@@ -150,14 +150,19 @@ TrajectoryT RouteWithAStar(const PointT& start, const PointT& end,
       break;
     } else {  // Moving forward
       auto next_point = GetNextTrajPoint(curr_astar_point);
-      curr_astar_point.Successors.erase(curr_astar_point.Successors.find(
-          next_point));  // Used, remove from reserved container
+      traj_stack.top().Successors.erase(traj_stack.top().Successors.find(
+          next_point));  // Used, remove from reserved container, directly
+                         // operate on the stack because curr_astart_point is
+                         // just a copy of that
+
+      auto next_astar_point = GenerateAStarTrajPointT(next_point);
+      curr_astar_point = next_astar_point;
       traj_stack.push(
           curr_astar_point);  // has succesors, valid point, store it.
       operated_points.emplace(curr_astar_point.Point);
-      auto next_astar_point = GenerateAStarTrajPointT(next_point);
-      curr_astar_point = next_astar_point;
-      // printf("Moving forward\n");
+
+      // printf("Try to moving forward to [%d/%d]\n", curr_astar_point.Point.i,
+      //        curr_astar_point.Point.j);
     }
   }
 
