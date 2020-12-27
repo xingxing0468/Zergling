@@ -172,7 +172,6 @@ TrajectoryT RouteWithAStar(const PointT& start, const PointT& end,
     } else if (curr_astar_point.SuccessorCandidates.find(end) !=
                curr_astar_point.SuccessorCandidates.end()) {
       // Route completed
-      traj_stack.push(curr_astar_point);
       traj_stack.push(GenerateAStarTrajPointT(end));
       break;
     } else {  // Moving forward
