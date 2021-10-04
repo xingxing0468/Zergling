@@ -12,6 +12,19 @@
 namespace {
 constexpr int kWidth{20};
 constexpr int kHeight{16};
+
+std::set<PointT> GetFourDirectionMovementPoints(const PointT& point) {
+  return {{point.i - 1, point.j},
+          {point.i, point.j - 1},
+          {point.i, point.j + 1},
+          {point.i + 1, point.j}};
+}
+std::set<PointT> GetEightDirectionMovementPoints(const PointT& point) {
+  return {{point.i - 1, point.j},     {point.i, point.j - 1},
+          {point.i, point.j + 1},     {point.i + 1, point.j},
+          {point.i - 1, point.j - 1}, {point.i - 1, point.j + 1},
+          {point.i + 1, point.j - 1}, {point.i + 1, point.j + 1}};
+}
 }  // namespace
 /*
 x x x x x x x x x x x | x x x x x x x x
@@ -200,4 +213,11 @@ TrajectoryT RouteWithAStar(const PointT& start, const PointT& end,
     traj_stack.pop();
   }
   return std::move(ret);
+}
+
+TrajectoryT RouteWithDp(const PointT& start, const PointT& end,
+                        const ObstaclesT& obs) {
+  TrajectoryT ret{};
+
+  return ret;
 }
