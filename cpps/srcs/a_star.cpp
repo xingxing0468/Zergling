@@ -5,6 +5,7 @@
 #include <stdio.h>
 
 #include <array>
+#include <cstdint>
 #include <limits>
 #include <list>
 #include <stack>
@@ -25,6 +26,48 @@ std::set<PointT> GetEightDirectionMovementPoints(const PointT& point) {
           {point.i - 1, point.j - 1}, {point.i - 1, point.j + 1},
           {point.i + 1, point.j - 1}, {point.i + 1, point.j + 1}};
 }
+
+struct AStarTrajPointT {
+  PointT Point;
+  std::set<PointT> SuccessorCandidates;
+};
+
+AStarTrajPointT GenerateAStarTrajPointT(
+    const std::list<AStarTrajPointT>& traj_list,
+    const std::set<PointT>& staled_points, const ObstaclesT& obs,
+    const PointT& point) {
+  AStarTrajPointT a_star_point;
+  a_star_point.Point = point;
+
+  // for (const auto& next_point : GetFourDirectionMovementPoints(point)) {
+  for (const auto& next_point : GetEightDirectionMovementPoints(point)) {
+    if (next_point.i < 0 || next_point.j < 0 || next_point.i >= kHeight ||
+        next_point.j >= kWidth) {  // index out of range
+      continue;
+    }
+    if (obs.find(next_point) != obs.end()) {  // Obstacle
+      continue;
+    }
+    if (staled_points.find(next_point) != staled_points.end()) {
+      continue;  // Already tried before, skip
+    }
+    bool bIsDuplicatedSuccessor{false};
+    for (const auto& existing_traj_point : traj_list) {
+      if (existing_traj_point.SuccessorCandidates.find(next_point) !=
+          existing_traj_point.SuccessorCandidates.end()) {
+        bIsDuplicatedSuccessor = true;
+        break;
+      }
+    }
+    if (bIsDuplicatedSuccessor) {
+      continue;
+    }  // Already existing in previous one's successors, has a relative
+       // smaller cost(1 + 1 > sqrt(2), 1 + sqrt(2) > 1)
+    a_star_point.SuccessorCandidates.emplace(next_point);
+  }
+  return a_star_point;
+}
+
 }  // namespace
 /*
 x x x x x x x x x x x | x x x x x x x x
@@ -93,10 +136,6 @@ void Plot(const PointT& start, const PointT& end, const TrajectoryT& traj,
 TrajectoryT RouteWithAStar(const PointT& start, const PointT& end,
                            const ObstaclesT& obs) {
   TrajectoryT ret{};
-  struct AStarTrajPointT {
-    PointT Point;
-    std::set<PointT> SuccessorCandidates;
-  };
 
   // TODO, consolidate these containers
   std::stack<AStarTrajPointT> traj_stack;
@@ -105,49 +144,6 @@ TrajectoryT RouteWithAStar(const PointT& start, const PointT& end,
   auto cost_func = [](const PointT& a,
                       const PointT& b) -> double {  // eular distance as cost
     return std::hypot(a.i - b.i, a.j - b.j);
-  };
-
-  auto GenerateAStarTrajPointT = [&traj_list, &operated_points, &obs](
-                                     const PointT& point) -> AStarTrajPointT {
-    AStarTrajPointT a_star_point;
-    a_star_point.Point = point;
-    std::set<PointT> four_direction_movement_points{{point.i - 1, point.j},
-                                                    {point.i, point.j - 1},
-                                                    {point.i, point.j + 1},
-                                                    {point.i + 1, point.j}};
-
-    std::set<PointT> eight_direction_movement_points{
-        {point.i - 1, point.j},     {point.i, point.j - 1},
-        {point.i, point.j + 1},     {point.i + 1, point.j},
-        {point.i - 1, point.j - 1}, {point.i - 1, point.j + 1},
-        {point.i + 1, point.j - 1}, {point.i + 1, point.j + 1}};
-    // for (const auto& next_point : four_direction_movement_points) {
-    for (const auto& next_point : eight_direction_movement_points) {
-      if (next_point.i < 0 || next_point.j < 0 || next_point.i >= kHeight ||
-          next_point.j >= kWidth) {  // index out of range
-        continue;
-      }
-      if (obs.find(next_point) != obs.end()) {  // Obstacle
-        continue;
-      }
-      if (operated_points.find(next_point) != operated_points.end()) {
-        continue;  // Already tried before, skip
-      }
-      bool bIsDuplicatedSuccessor{false};
-      for (const auto& existing_traj_point : traj_list) {
-        if (existing_traj_point.SuccessorCandidates.find(next_point) !=
-            existing_traj_point.SuccessorCandidates.end()) {
-          bIsDuplicatedSuccessor = true;
-          break;
-        }
-      }
-      if (bIsDuplicatedSuccessor) {
-        continue;
-      }  // Already existing in previous one's successors, has a relative
-         // smaller cost(1 + 1 > sqrt(2), 1 + sqrt(2) > 1)
-      a_star_point.SuccessorCandidates.emplace(next_point);
-    }
-    return a_star_point;
   };
 
   auto GetNextTrajPoint =
@@ -164,7 +160,8 @@ TrajectoryT RouteWithAStar(const PointT& start, const PointT& end,
     return next_point;
   };
 
-  AStarTrajPointT curr_astar_point = GenerateAStarTrajPointT(start);
+  AStarTrajPointT curr_astar_point =
+      GenerateAStarTrajPointT(traj_list, operated_points, obs, start);
   traj_stack.push(curr_astar_point);
   operated_points.emplace(curr_astar_point.Point);
   traj_list.push_back(curr_astar_point);
@@ -185,7 +182,8 @@ TrajectoryT RouteWithAStar(const PointT& start, const PointT& end,
     } else if (curr_astar_point.SuccessorCandidates.find(end) !=
                curr_astar_point.SuccessorCandidates.end()) {
       // Route completed
-      traj_stack.push(GenerateAStarTrajPointT(end));
+      traj_stack.push(
+          GenerateAStarTrajPointT(traj_list, operated_points, obs, end));
       break;
     } else {  // Moving forward
       auto next_point = GetNextTrajPoint(curr_astar_point);
@@ -195,7 +193,8 @@ TrajectoryT RouteWithAStar(const PointT& start, const PointT& end,
                              // operate on the stack because curr_astart_point
                              // is just a copy of that
 
-      curr_astar_point = GenerateAStarTrajPointT(next_point);
+      curr_astar_point =
+          GenerateAStarTrajPointT(traj_list, operated_points, obs, next_point);
       traj_stack.push(
           curr_astar_point);  // has succesors, valid point, store it.
       traj_list.push_back(curr_astar_point);
@@ -212,11 +211,12 @@ TrajectoryT RouteWithAStar(const PointT& start, const PointT& end,
     ret.emplace(traj_stack.top().Point);
     traj_stack.pop();
   }
-  return std::move(ret);
+  return ret;
 }
 
-TrajectoryT RouteWithDp(const PointT& start, const PointT& end,
-                        const ObstaclesT& obs) {
+TrajectoryT RouteEveryPossiblePathThenFindMinOne(const PointT& start,
+                                                 const PointT& end,
+                                                 const ObstaclesT& obs) {
   TrajectoryT ret{};
 
   return ret;
