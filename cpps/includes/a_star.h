@@ -27,4 +27,8 @@ void Plot(const PointT& start, const PointT& end, const TrajectoryT& traj,
 
 TrajectoryT RouteWithAStar(const PointT& start, const PointT& end,
                            const ObstaclesT& obs);
+
+TrajectoryT RouteEveryPossiblePathThenFindMinOne(const PointT& start,
+                                                 const PointT& end,
+                                                 const ObstaclesT& obs);
 #endif

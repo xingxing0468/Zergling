@@ -26,7 +26,8 @@ TEST(AStar, Typical) {
   ObstaclesT obs{kCol11Obstacles};
   obs.erase(obs.find({3, 11}));
 
-  TrajectoryT traj = RouteWithAStar(kStart, kEnd, obs);
+  // TrajectoryT traj = RouteWithAStar(kStart, kEnd, obs);
+  TrajectoryT traj = RouteEveryPossiblePathThenFindMinOne(kStart, kEnd, obs);
   Plot(kStart, kEnd, traj, obs);
 
   EXPECT_NE(traj.find(kStart), traj.end());
@@ -43,7 +44,8 @@ TEST(AStar, Typical) {
 }
 
 TEST(AStar, NoObstacles) {
-  TrajectoryT traj = RouteWithAStar(kStart, kEnd, {});
+  // TrajectoryT traj = RouteWithAStar(kStart, kEnd, {});
+  TrajectoryT traj = RouteEveryPossiblePathThenFindMinOne(kStart, kEnd, {});
   Plot(kStart, kEnd, traj, {});
 
   EXPECT_NE(traj.find(kStart), traj.end());
@@ -51,7 +53,9 @@ TEST(AStar, NoObstacles) {
 }
 
 TEST(AStar, NoTrajectory) {
-  TrajectoryT traj = RouteWithAStar(kStart, kEnd, kCol11Obstacles);
+  // TrajectoryT traj = RouteWithAStar(kStart, kEnd, kCol11Obstacles);
+  TrajectoryT traj =
+      RouteEveryPossiblePathThenFindMinOne(kStart, kEnd, kCol11Obstacles);
   Plot(kStart, kEnd, traj, kCol11Obstacles);
   EXPECT_EQ(TrajectoryT{}, traj);
 }

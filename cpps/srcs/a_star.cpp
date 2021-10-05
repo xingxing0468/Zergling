@@ -217,7 +217,73 @@ TrajectoryT RouteWithAStar(const PointT& start, const PointT& end,
 TrajectoryT RouteEveryPossiblePathThenFindMinOne(const PointT& start,
                                                  const PointT& end,
                                                  const ObstaclesT& obs) {
-  TrajectoryT ret{};
+  TrajectoryT ret_candidate{};
+  std::uint16_t candidate_cost{std::numeric_limits<std::uint16_t>::max()};
 
-  return ret;
+  std::stack<AStarTrajPointT> traj_stack;
+  std::list<AStarTrajPointT> traj_list;
+  std::set<PointT> operated_points;
+
+  AStarTrajPointT curr_astar_point =
+      GenerateAStarTrajPointT(traj_list, operated_points, obs, start);
+  traj_stack.push(curr_astar_point);
+  operated_points.emplace(curr_astar_point.Point);
+  traj_list.push_back(curr_astar_point);
+
+  while (1) {
+    if (curr_astar_point.SuccessorCandidates
+            .empty()) {  // NO successors, trace back
+      traj_stack.pop();
+      traj_list.pop_back();
+      if (traj_stack.empty()) {
+        break;
+      }
+      curr_astar_point = traj_stack.top();
+
+      // printf("Try to moving backward to [%d/%d]\n",
+      // curr_astar_point.Point.i,
+      //         curr_astar_point.Point.j);
+    } else if (curr_astar_point.SuccessorCandidates.find(end) !=
+               curr_astar_point.SuccessorCandidates.end()) {
+      // Route completed
+
+      // Compare the cost with the current candidate, only pick the smaller one
+      // Now only use size as cost
+      if (traj_stack.size() < candidate_cost) {
+        ret_candidate.clear();
+        for (const auto& point :
+             traj_list) {  // stack is not interatable, only list can
+          ret_candidate.emplace(point.Point);
+        }
+        candidate_cost = ret_candidate.size();
+      }
+      // track back to find other trajectories
+      traj_stack.pop();
+      traj_list.pop_back();
+      if (traj_stack.empty()) {
+        break;
+      }
+      curr_astar_point = traj_stack.top();
+    } else {  // Moving forward
+      auto next_point = *curr_astar_point.SuccessorCandidates.begin();
+      traj_stack.top().SuccessorCandidates.erase(
+          traj_stack.top().SuccessorCandidates.find(
+              next_point));  // Used, remove from reserved container,
+                             // directly operate on the stack because
+                             // curr_astart_point is just a copy of that
+
+      curr_astar_point =
+          GenerateAStarTrajPointT(traj_list, operated_points, obs, next_point);
+      traj_stack.push(
+          curr_astar_point);  // has succesors, valid point, store it.
+      traj_list.push_back(curr_astar_point);
+      operated_points.emplace(curr_astar_point.Point);
+
+      // printf("Try to moving forward to [%d/%d]\n",
+      // curr_astar_point.Point.i,
+      //        curr_astar_point.Point.j);
+    }
+  }
+
+  return ret_candidate;
 }
