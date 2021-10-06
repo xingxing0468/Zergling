@@ -48,9 +48,9 @@ AStarTrajPointT GenerateAStarTrajPointT(
     if (obs.find(next_point) != obs.end()) {  // Obstacle
       continue;
     }
-    if (staled_points.find(next_point) != staled_points.end()) {
-      continue;  // Already tried before, skip
-    }
+    // if (staled_points.find(next_point) != staled_points.end()) {
+    //   continue;  // Already tried before, skip
+    // }
     bool bIsDuplicatedSuccessor{false};
     for (const auto& existing_traj_point : traj_list) {
       if (existing_traj_point.SuccessorCandidates.find(next_point) !=
