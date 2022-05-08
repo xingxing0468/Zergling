@@ -11,7 +11,7 @@ TEST(LIS, Typical) {
   auto ret = FindLongestIncreasingSubSequence(seq);
   // printf("Sequence: \n");
   // std::for_each(seq.begin(), seq.end(),
-                [](const int& num) { printf("%d ", num); });
+  //              [](const int& num) { printf("%d ", num); });
   // printf("\n");
   EXPECT_EQ(expected, ret);
 }
