@@ -1,2 +1,2 @@
 build:zerus --cxxopt='-std=c++17'
-build:zerus --test_output=streamed
+build:zerus --test_output=error
