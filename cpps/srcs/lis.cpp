@@ -64,14 +64,13 @@ std::vector<int> FindLongestIncreasingSubSequence(
     }
   }
 
-  // Debug trace
-  //for (const auto& sub_iss : sub_iss_table) {
-    // printf("sub iss: ");
-    // for (const auto& element : sub_iss) {
-    //  printf("%d ", element);
-    // }
-    // printf("\n");
-  //}
+  // Debug trace for (const auto& sub_iss : sub_iss_table) {
+  //   printf("sub iss: ");
+  //   for (const auto& element : sub_iss) {
+  //     printf("%d ", element);
+  //   }
+  //   printf("\n");
+  // }
 
   return lis_end_element_index < 0 ? std::vector<int>{}
                                    : sub_iss_table[lis_end_element_index];
