@@ -20,7 +20,7 @@ TEST_F(FindKthLargestFixture, Typical) {
   EXPECT_EQ(FindKthLargest(typical_test_data, k), 18);
 
   k = 12;
-  EXPECT_EQ(FindKthLargest(typical_test_data, k), 2);
+  EXPECT_EQ(FindKthLargest(typical_test_data, k), 3);
 
   k = 4;
   EXPECT_EQ(FindKthLargest(typical_test_data, k), 12);
