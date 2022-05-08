@@ -5,6 +5,7 @@ cc_library(
     srcs = [
         "srcs/A.cpp",
         "srcs/a_star.cpp",
+        "srcs/find_kth_largest.cpp",
         "srcs/lis.cpp",
     ],
     hdrs = [
@@ -20,6 +21,7 @@ cc_test(
     srcs = [
         "tests/A_unit_test.cpp",
         "tests/a_star_unit_test.cpp",
+        "tests/find_kth_largest_test.cpp",
         "tests/lis_unit_test.cpp",
     ],
     deps = [
