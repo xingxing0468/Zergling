@@ -31,6 +31,8 @@ void AdjustToKeepMinHeapBelow(std::vector<int>& nums, int end_idx,
       auto tmp = nums[sub_min_heap_root_idx];
       nums[sub_min_heap_root_idx] = nums[min_child_idx];
       nums[min_child_idx] = tmp;
+
+      // iterate next swapped sub heap
       sub_min_heap_root_idx = min_child_idx;
     } else {
       break;
@@ -62,6 +64,8 @@ void SetupMinHeap(std::vector<int>& nums) {
       // swap, move smaller one to parent pos
       nums[(i - 1) / 2] = nums[i];
       nums[i] = parent_value;
+
+      // Adjust is mandatory to keep the min heap after any swap
       AdjustToKeepMinHeapBelow(nums, nums.size(), i);
     }
   }
