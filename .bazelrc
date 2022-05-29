@@ -1,3 +1,2 @@
-build:zerus --cxxopt='-fsanitize=address'
 build:zerus --cxxopt='-std=c++17'
 build:zerus --test_output=errors

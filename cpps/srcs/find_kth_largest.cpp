@@ -61,7 +61,7 @@ void AdjustToKeepMaxHeapBelow(std::vector<int>& nums, int end_idx,
 }
 
 void SetupMaxHeap(std::vector<int>& nums) {
-  for (int i = nums.size(); i > 0; --i) {
+  for (int i = nums.size() - 1; i > 0; --i) {
     int parent_value = nums[(i - 1) / 2];
     if (parent_value < nums[i]) {
       // swap, move smaller one to parent pos
