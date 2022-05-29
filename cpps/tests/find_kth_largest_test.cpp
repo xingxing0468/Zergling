@@ -12,6 +12,7 @@ class FindKthLargestFixture : public ::testing::Test {
 };
 
 TEST_F(FindKthLargestFixture, KOutOfRange) {
+  int k{static_cast<int>(typical_test_data.size()) + 1};
   ASSERT_EQ(FindKthLargestWithPartialInsertSort(typical_test_data, k), -1);
   ASSERT_EQ(FindKthLargestWithHeapSort(typical_test_data, k), -1);
 
