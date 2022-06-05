@@ -1,5 +1,10 @@
+#include <algorithm>
 #include <list>
+#include <random>
+#include <set>
 #include <vector>
+
+#include "memory.h"
 
 // TO BE optimized with binary insert?
 void insert_element_following_order(std::list<int>& collection, int value) {
@@ -91,4 +96,94 @@ int FindKthLargestWithHeapSort(std::vector<int>& input, int order) {
     AdjustToKeepMaxHeapBelow(input, i, 0);
   }
   return input[input.size() - order];
+}
+
+int FindKthLergetWithMinHeapOfKSize(std::vector<int>& nums, int k) {
+  if (k <= 0 || k > nums.size()) {
+    return -1;
+  }
+
+  std::multiset<int> min_heap_of_k_elements;
+  for (const auto value : nums) {
+    if (min_heap_of_k_elements.size() < k) {
+      min_heap_of_k_elements.insert(value);  // no enough element in the heap
+    } else {  // kick the smallest out, because we only need to give max kth
+      if (value > *min_heap_of_k_elements.begin()) {
+        min_heap_of_k_elements.erase(min_heap_of_k_elements.begin());
+        min_heap_of_k_elements.insert(value);
+      }
+    }
+  }
+
+  // the root element is the smallest one in the heap,
+  // and all the elements in the heap are larger than anyone in the rest of the
+  // heap
+  return *min_heap_of_k_elements.begin();
+}
+
+// For quick sort
+// in [lo_index, high_index] return the index of pivot which
+// Ensures [lo_index, pivot) >= pivot >= (pivot, high_index]
+int GetPartitionIndex(std::vector<int>& nums, int lo_index, int high_index) {
+  auto pivot_index = lo_index;
+  auto pivot_value = nums[pivot_index];
+
+  // consecuctive values < pivot_value and have to been moved together with the
+  // pivot_value
+  int values_to_be_moved_count = 0;
+  for (auto i = lo_index + 1; i <= high_index; ++i) {
+    if (nums[i] < pivot_value) {
+      ++values_to_be_moved_count;
+    } else {  // swap, order: nums[i] > pivot_value > values_to_be_moved
+      nums[pivot_index] = nums[i];
+
+      ++pivot_index;
+      if (values_to_be_moved_count > 0) {
+        // Some compiler forbidden copy the memory if there is overlap
+        // between dst and src(Error: memcpy-param-overlap)
+        // so we have to allocate another container to cache the values
+        std::vector<int> tmp;
+        tmp.reserve(values_to_be_moved_count);
+        tmp.insert(tmp.begin(), nums.begin() + pivot_index,
+                   nums.begin() + pivot_index + values_to_be_moved_count);
+        memcpy(nums.data() + pivot_index + 1, tmp.data(),
+               values_to_be_moved_count * sizeof(int));
+      }
+      nums[pivot_index] = pivot_value;
+    }
+  }
+  return pivot_index;
+}
+
+int FindKthLergetWithQuickSelection(std::vector<int>& nums, int k) {
+  if (k <= 0 || k > nums.size()) {
+    return -1;
+  }
+
+  // shuffle the input to make the average complexy to O(2N)
+  std::random_device rd;
+  std::default_random_engine rng(rd());
+  std::shuffle(nums.begin(), nums.end(), rng);
+
+  auto expected_index = k - 1;  // convert k to index
+  int lo_index = 0;
+  int high_index = static_cast<int>(nums.size()) - 1;
+
+  auto current_pivot_idx = GetPartitionIndex(nums, lo_index, high_index);
+
+  while (1) {
+    if (current_pivot_idx == expected_index) {
+      break;
+    }
+    // exist in [lo_index, current_pivot_idx)
+    else if (current_pivot_idx > expected_index) {
+      high_index = current_pivot_idx - 1;
+    }
+    // exist in [current_pivot_idx, high_index)
+    else {
+      lo_index = current_pivot_idx + 1;
+    }
+    current_pivot_idx = GetPartitionIndex(nums, lo_index, high_index);
+  }
+  return nums[current_pivot_idx];
 }
