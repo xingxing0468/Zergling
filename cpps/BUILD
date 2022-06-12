@@ -8,6 +8,7 @@ cc_library(
         "srcs/find_kth_largest.cpp",
         "srcs/heap_sort.cpp",
         "srcs/lis.cpp",
+        "srcs/merge_sort.cpp",
     ],
     hdrs = [
         "includes/A.h",
@@ -23,8 +24,8 @@ cc_test(
         "tests/A_unit_test.cpp",
         "tests/a_star_unit_test.cpp",
         "tests/find_kth_largest_test.cpp",
-        "tests/heap_sort_test.cpp",
         "tests/lis_unit_test.cpp",
+        "tests/sort_test.cpp",
     ],
     deps = [
         ":Lib",
