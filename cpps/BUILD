@@ -9,6 +9,7 @@ cc_library(
         "srcs/heap_sort.cpp",
         "srcs/lis.cpp",
         "srcs/merge_sort.cpp",
+        "srcs/quick_sort.cpp",
     ],
     hdrs = [
         "includes/A.h",
