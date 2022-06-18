@@ -6,6 +6,9 @@
 
 #include "memory.h"
 
+extern int GetPartitionIndex(std::vector<int>& nums, int lo_index,
+                             int high_index);
+
 // TO BE optimized with binary insert?
 void insert_element_following_order(std::list<int>& collection, int value) {
   bool bInserted{false};
@@ -119,40 +122,6 @@ int FindKthLergetWithMinHeapOfKSize(std::vector<int>& nums, int k) {
   // and all the elements in the heap are larger than anyone in the rest of the
   // heap
   return *min_heap_of_k_elements.begin();
-}
-
-// For quick sort
-// in [lo_index, high_index] return the index of pivot which
-// Ensures [lo_index, pivot) >= pivot >= (pivot, high_index]
-int GetPartitionIndex(std::vector<int>& nums, int lo_index, int high_index) {
-  auto pivot_index = lo_index;
-  auto pivot_value = nums[pivot_index];
-
-  // consecuctive values < pivot_value and have to been moved together with the
-  // pivot_value
-  int values_to_be_moved_count = 0;
-  for (auto i = lo_index + 1; i <= high_index; ++i) {
-    if (nums[i] < pivot_value) {
-      ++values_to_be_moved_count;
-    } else {  // swap, order: nums[i] > pivot_value > values_to_be_moved
-      nums[pivot_index] = nums[i];
-
-      ++pivot_index;
-      if (values_to_be_moved_count > 0) {
-        // Some compiler forbidden copy the memory if there is overlap
-        // between dst and src(Error: memcpy-param-overlap)
-        // so we have to allocate another container to cache the values
-        std::vector<int> tmp;
-        tmp.reserve(values_to_be_moved_count);
-        tmp.insert(tmp.begin(), nums.begin() + pivot_index,
-                   nums.begin() + pivot_index + values_to_be_moved_count);
-        memcpy(nums.data() + pivot_index + 1, tmp.data(),
-               values_to_be_moved_count * sizeof(int));
-      }
-      nums[pivot_index] = pivot_value;
-    }
-  }
-  return pivot_index;
 }
 
 int FindKthLergetWithQuickSelection(std::vector<int>& nums, int k) {
