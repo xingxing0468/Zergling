@@ -4,6 +4,7 @@
 
 extern void MergeSort(std::vector<int>& nums);
 extern void HeapSort(std::vector<int>& nums);
+extern void QuickSort(std::vector<int>& nums);
 extern void SetupMinHeap(std::vector<int>& nums);
 
 class SortTestFixture : public ::testing::Test {
@@ -45,6 +46,21 @@ TEST_F(SortTestFixture, AlreadySortedWithMergeSort) {
   std::vector<int> data_to_be_tested{sorted_nums_};
   std::vector<int> expect{10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
   MergeSort(data_to_be_tested);
+
+  EXPECT_EQ(data_to_be_tested, sorted_nums_);
+}
+
+TEST_F(SortTestFixture, TypicalWithQuickSort) {
+  std::vector<int> data_to_be_tested{typical_nums_};
+  QuickSort(data_to_be_tested);
+
+  EXPECT_EQ(data_to_be_tested, sorted_nums_);
+}
+
+TEST_F(SortTestFixture, AlreadySortedWithQuickSort) {
+  std::vector<int> data_to_be_tested{sorted_nums_};
+  std::vector<int> expect{10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0};
+  QuickSort(data_to_be_tested);
 
   EXPECT_EQ(data_to_be_tested, sorted_nums_);
 }
