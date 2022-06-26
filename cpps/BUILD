@@ -5,6 +5,8 @@ cc_library(
     srcs = [
         "srcs/A.cpp",
         "srcs/a_star.cpp",
+        "srcs/coin_count.cpp",
+        "srcs/fibonacci.cpp",
         "srcs/find_kth_largest.cpp",
         "srcs/heap_sort.cpp",
         "srcs/lis.cpp",
@@ -24,6 +26,8 @@ cc_test(
     srcs = [
         "tests/A_unit_test.cpp",
         "tests/a_star_unit_test.cpp",
+        "tests/coins_test.cpp",
+        "tests/fibonacci_test.cpp",
         "tests/find_kth_largest_test.cpp",
         "tests/lis_unit_test.cpp",
         "tests/sort_test.cpp",
