@@ -11,6 +11,7 @@ cc_library(
         "srcs/heap_sort.cpp",
         "srcs/lis.cpp",
         "srcs/merge_sort.cpp",
+        "srcs/min_fall_path_sum.cpp",
         "srcs/quick_sort.cpp",
     ],
     hdrs = [
@@ -30,6 +31,7 @@ cc_test(
         "tests/fibonacci_test.cpp",
         "tests/find_kth_largest_test.cpp",
         "tests/lis_unit_test.cpp",
+        "tests/min_fall_path_sum_test.cpp",
         "tests/sort_test.cpp",
     ],
     deps = [
